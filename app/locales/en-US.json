@@ -97,6 +97,9 @@
     }
   },
   "messages": {
+    "连接测试成功！": "Connection test successful!",
+    "请先配置 Jackett 地址和 API Key": "Please configure Jackett address and API Key first",
+    "连接失败，请检查地址、API Key 及网络连通性": "Connection failed, please check the address, API Key and network connectivity",
     "模块不支持测试": "Module does not support testing",
     "网络请求失败": "Network request failed",
     "附件保存失败": "Failed to save attachment",

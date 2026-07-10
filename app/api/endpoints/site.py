@@ -47,6 +47,17 @@ async def read_sites(
     return await Site.async_list_order_by_pri(db)
 
 
+@router.get("/indexsites", summary="可分配的索引站点", response_model=List[dict])
+def get_index_sites(
+    _: schemas.TokenPayload = Depends(verify_token),
+) -> Any:
+    """
+    获取当前系统支持的所有可用索引站点（包括已启用的自定义 PT 站、Jackett 子索引器及内置公开站点）
+    """
+    indexers = SitesHelper().get_indexers()
+    return [{"id": x.get("id"), "name": x.get("name"), "domain": x.get("domain")} for x in indexers]
+
+
 @router.post("/", summary="新增站点", response_model=schemas.Response)
 async def add_site(
     *,

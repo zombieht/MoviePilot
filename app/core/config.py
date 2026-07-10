@@ -196,6 +196,12 @@ class ConfigModel(BaseModel):
     # DOH 解析服务器列表
     DOH_RESOLVERS: str = "1.0.0.1,1.1.1.1,9.9.9.9,149.112.112.112"
 
+    # ==================== Jackett 配置 ====================
+    # Jackett地址 格式：http(s)://IP:PORT
+    JACKETT_HOST: Optional[str] = None
+    # Jackett API Key
+    JACKETT_API_KEY: Optional[str] = None
+
     # ==================== 媒体元数据配置 ====================
     # 媒体搜索来源 themoviedb/douban/bangumi，多个用,分隔
     SEARCH_SOURCE: str = "themoviedb"

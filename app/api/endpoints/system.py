@@ -1297,6 +1297,18 @@ def moduletest(moduleid: str, _: schemas.TokenPayload = Depends(verify_token)):
     """
     模块可用性测试接口
     """
+    if moduleid.lower() == "jackett":
+        from app.helper.jackett import JackettHelper
+        helper = JackettHelper()
+        indexers = helper.get_indexers()
+        if indexers:
+            return schemas.Response(success=True, message="连接测试成功！")
+        else:
+            host, _, _ = helper.get_config()
+            if not host:
+                return schemas.Response(success=False, message="请先配置 Jackett 地址和 API Key")
+            return schemas.Response(success=False, message="连接失败，请检查地址、API Key 及网络连通性")
+
     state, errmsg = ModuleManager().test(moduleid)
     return schemas.Response(success=state, message=errmsg)
 

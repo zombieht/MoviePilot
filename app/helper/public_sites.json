@@ -1,0 +1,1103 @@
+[
+  {
+    "id": "1337x",
+    "name": "1337x",
+    "domain": "https://1337x.to/",
+    "encoding": "UTF-8",
+    "search": {
+      "paths": [
+        {
+          "path": "search/{keyword}/1/",
+          "method": "get"
+        }
+      ]
+    },
+    "torrents": {
+      "list": {
+        "selector": "div.table-list-wrap > table > tbody > tr"
+      },
+      "fields": {
+        "id": {
+          "selector": "td.name > a[href*=\"/torrent/\"]",
+          "attribute": "href",
+          "filters": [
+            {
+              "name": "re_search",
+              "args": [
+                "\\d+",
+                0
+              ]
+            }
+          ]
+        },
+        "title": {
+          "selector": "td.name > a[href*=\"/torrent/\"]"
+        },
+        "details": {
+          "selector": "td.name > a[href*=\"/torrent/\"]",
+          "attribute": "href"
+        },
+        "download": {
+          "detail": {
+            "xpath": "//a[contains(@href, \"magnet:\")]/@href"
+          }
+        },
+        "date_added": {
+          "selector": "td.coll-date"
+        },
+        "size": {
+          "selector": "td.size"
+        },
+        "seeders": {
+          "selector": "td.seeds"
+        },
+        "leechers": {
+          "selector": "td.leeches"
+        },
+        "grabs": {
+          "selector": "td.user"
+        },
+        "downloadvolumefactor": {
+          "case": {
+            "*": 0
+          }
+        },
+        "uploadvolumefactor": {
+          "case": {
+            "*": 1
+          }
+        }
+      }
+    },
+    "parser": "",
+    "public": true
+  },
+  {
+    "id": "hdpianyuan",
+    "name": "高清片源网",
+    "domain": "https://www.hdpianyuan.com/",
+    "encoding": "UTF-8",
+    "search": {
+      "paths": [
+        {
+          "path": "search.htm?keyword={keyword}",
+          "method": "get"
+        }
+      ]
+    },
+    "torrents": {
+      "list": {
+        "selector": "ul.list-unstyled.threadlist > li"
+      },
+      "fields": {
+        "title": {
+          "selector": "div.media-body > div.subject > a[href*=\"source-\"]"
+        },
+        "details": {
+          "selector": "div.media-body > div.subject > a[href*=\"source-\"]",
+          "attribute": "href"
+        },
+        "download": {
+          "detail": {
+            "xpath": "//span[@id=\"link_text_span\"]/text()"
+          }
+        },
+        "date_added": {
+          "selector": "div.media-body > div.subject > span:nth-child(2)"
+        },
+        "size": {
+          "selector": "div.media-body > div.subject > span:nth-child(1)"
+        },
+        "description": {
+          "selector": "span.filenamespan"
+        },
+        "downloadvolumefactor": {
+          "case": {
+            "*": 0
+          }
+        },
+        "uploadvolumefactor": {
+          "case": {
+            "*": 1
+          }
+        }
+      }
+    },
+    "parser": "",
+    "public": true
+  },
+  {
+    "id": "katcr",
+    "name": "KickAssTorrents",
+    "domain": "https://katcr.to/",
+    "encoding": "UTF-8",
+    "search": {
+      "paths": [
+        {
+          "path": "usearch/{keyword}/",
+          "method": "get"
+        }
+      ]
+    },
+    "torrents": {
+      "list": {
+        "selector": "table.data.frontPageWidget > tbody > tr"
+      },
+      "fields": {
+        "title": {
+          "selector": "div.torrentname > div.markeredBlock.torType.filmType > a"
+        },
+        "details": {
+          "selector": "div.torrentname > div.markeredBlock.torType.filmType > a",
+          "attribute": "href"
+        },
+        "download": {
+          "detail": {
+            "xpath": "//a[contains(@class, \"giantButton\")][contains(@href, \"magnet:\")]/@href"
+          }
+        },
+        "date_added": {
+          "selector": "td:nth-child(4)",
+          "optional": true
+        },
+        "size": {
+          "selector": "td:nth-child(2)",
+          "filters": [
+            {
+              "name": "strip"
+            }
+          ]
+        },
+        "seeders": {
+          "selector": "td:nth-child(5)",
+          "filters": [
+            {
+              "name": "strip"
+            }
+          ]
+        },
+        "leechers": {
+          "selector": "td:nth-child(6)",
+          "filters": [
+            {
+              "name": "strip"
+            }
+          ]
+        },
+        "downloadvolumefactor": {
+          "case": {
+            "*": 0
+          }
+        },
+        "uploadvolumefactor": {
+          "case": {
+            "*": 1
+          }
+        }
+      }
+    },
+    "parser": "",
+    "public": true
+  },
+  {
+    "id": "mp4ba",
+    "name": "高清Mp4吧",
+    "domain": "https://www.mp4ba.vip/",
+    "encoding": "UTF-8",
+    "search": {
+      "paths": [
+        {
+          "path": "?s={keyword}",
+          "method": "get"
+        }
+      ]
+    },
+    "torrents": {
+      "list": {
+        "selector": "div.container > div.mainleft > ul > li"
+      },
+      "fields": {
+        "title": {
+          "selector": "div.article > h2 > a",
+          "filters": [
+            {
+              "name": "replace",
+              "args": [
+                "][",
+                " "
+              ]
+            },
+            {
+              "name": "replace",
+              "args": [
+                "[",
+                ""
+              ]
+            },
+            {
+              "name": "replace",
+              "args": [
+                "]",
+                ""
+              ]
+            }
+          ]
+        },
+        "details": {
+          "selector": "div.article > h2 > a",
+          "attribute": "href"
+        },
+        "download": {
+          "detail": {
+            "xpath": "//div[@class=\"hacklogdownload_right\"]/a/@href"
+          }
+        },
+        "downloadvolumefactor": {
+          "case": {
+            "*": 0
+          }
+        },
+        "uploadvolumefactor": {
+          "case": {
+            "*": 1
+          }
+        }
+      }
+    },
+    "parser": "",
+    "public": true
+  },
+  {
+    "id": "ext",
+    "name": "EXT.TO",
+    "domain": "https://ext.to/",
+    "encoding": "UTF-8",
+    "search": {
+      "paths": [
+        {
+          "path": "search/?q={keyword}",
+          "method": "get"
+        }
+      ]
+    },
+    "torrents": {
+      "list": {
+        "selector": "div.table-responsive > table > tbody > tr"
+      },
+      "fields": {
+        "id": {
+          "selector": "td:nth-child(3) > a",
+          "attribute": "href"
+        },
+        "title": {
+          "selector": "td:nth-child(1) > div.float-left > a > b"
+        },
+        "details": {
+          "selector": "td:nth-child(1) > div.float-left > a",
+          "attribute": "href"
+        },
+        "download": {
+          "selector": "a.dwn-btn.torrent-dwn",
+          "attribute": "href"
+        },
+        "date_added": {
+          "selector": "td:nth-child(4) > div > span:nth-child(2)"
+        },
+        "size": {
+          "selector": "td:nth-child(2) > div > span:nth-child(2)"
+        },
+        "seeders": {
+          "selector": "td:nth-child(5) > span.text-success"
+        },
+        "leechers": {
+          "selector": "td:nth-child(6) > span.text-danger"
+        },
+        "downloadvolumefactor": {
+          "case": {
+            "*": 0
+          }
+        },
+        "uploadvolumefactor": {
+          "case": {
+            "*": 1
+          }
+        }
+      }
+    },
+    "parser": "",
+    "public": true
+  },
+  {
+    "id": "nyaa",
+    "name": "Nyaa",
+    "domain": "https://nyaa.si/",
+    "encoding": "UTF-8",
+    "search": {
+      "paths": [
+        {
+          "path": "?f=0&c=0_0&q={keyword}",
+          "method": "get"
+        }
+      ]
+    },
+    "torrents": {
+      "list": {
+        "selector": "table.torrent-list > tbody > tr"
+      },
+      "fields": {
+        "id": {
+          "selector": "a[href*=\"/view/\"]",
+          "attribute": "href",
+          "filters": [
+            {
+              "name": "re_search",
+              "args": [
+                "\\d+",
+                0
+              ]
+            }
+          ]
+        },
+        "title": {
+          "selector": "td:nth-child(2) > a"
+        },
+        "details": {
+          "selector": "td:nth-child(2) > a",
+          "attribute": "href"
+        },
+        "download": {
+          "selector": "td:nth-child(3) > a[href*=\"magnet\"]",
+          "attribute": "href"
+        },
+        "date_added": {
+          "selector": "td:nth-child(5)"
+        },
+        "size": {
+          "selector": "td:nth-child(4)"
+        },
+        "seeders": {
+          "selector": "td:nth-child(6)"
+        },
+        "leechers": {
+          "selector": "td:nth-child(7)"
+        },
+        "grabs": {
+          "selector": "td:nth-child(8)"
+        },
+        "downloadvolumefactor": {
+          "case": {
+            "*": 0
+          }
+        },
+        "uploadvolumefactor": {
+          "case": {
+            "*": 1
+          }
+        }
+      }
+    },
+    "parser": "",
+    "public": true
+  },
+  {
+    "id": "skrbt",
+    "name": "SkrBT",
+    "domain": "https://skrbtfi.top/",
+    "encoding": "UTF-8",
+    "search": {
+      "paths": [
+        {
+          "path": null,
+          "method": "chrome",
+          "params": {
+            "keyword": "//input[@name=\"keyword\"]",
+            "submit": "//button[@type=\"submit\"]",
+            "referer": "search?keyword={keyword}"
+          }
+        }
+      ]
+    },
+    "torrents": {
+      "list": {
+        "selector": "ul.list-unstyled"
+      },
+      "fields": {
+        "title": {
+          "selector": "a.result-resource-title",
+          "attribute": "title"
+        },
+        "details": {
+          "selector": "a.result-resource-title",
+          "attribute": "href"
+        },
+        "download": {
+          "detail": {
+            "xpath": "//a[@id=\"magnet\"]/@href"
+          }
+        },
+        "date_added": {
+          "selector": "li.result-resource-meta-info > span:nth-child(3)",
+          "optional": true
+        },
+        "size": {
+          "selector": "li.result-resource-meta-info > span:nth-child(1)"
+        },
+        "downloadvolumefactor": {
+          "case": {
+            "*": 0
+          }
+        },
+        "uploadvolumefactor": {
+          "case": {
+            "*": 1
+          }
+        }
+      }
+    },
+    "parser": "",
+    "public": true
+  },
+  {
+    "id": "torrentgalaxy",
+    "name": "TorrentGalaxy",
+    "domain": "https://torrentgalaxy.to/",
+    "encoding": "UTF-8",
+    "search": {
+      "paths": [
+        {
+          "path": "torrents.php",
+          "method": "get"
+        }
+      ],
+      "params": {
+        "search": "{keyword}"
+      }
+    },
+    "torrents": {
+      "list": {
+        "selector": "div.tgxtable > div.tgxtablerow.txlight"
+      },
+      "fields": {
+        "id": {
+          "selector": "a[href~=\"/torrent/\"]",
+          "attribute": "href",
+          "filters": [
+            {
+              "name": "re_search",
+              "args": [
+                "\\d+",
+                0
+              ]
+            }
+          ]
+        },
+        "title": {
+          "selector": "a.txlight > b"
+        },
+        "details": {
+          "selector": "a.txlight",
+          "attribute": "href"
+        },
+        "download": {
+          "selector": "div.txlight > a[href*=\"magnet:\"]",
+          "attribute": "href"
+        },
+        "date_added": {
+          "selector": "div:nth-child(12)"
+        },
+        "size": {
+          "selector": "div.txlight > span.badge.badge-secondary.txlight"
+        },
+        "seeders": {
+          "selector": "span[title=\"Seeders/Leechers\"] > font[color=\"green\"] > b"
+        },
+        "leechers": {
+          "selector": "span[title=\"Seeders/Leechers\"] > font[color=\"#ff0000\"] > b"
+        },
+        "downloadvolumefactor": {
+          "case": {
+            "*": 0
+          }
+        },
+        "uploadvolumefactor": {
+          "case": {
+            "*": 1
+          }
+        }
+      }
+    },
+    "parser": "",
+    "public": true
+  },
+  {
+    "id": "acg.rip",
+    "name": "ACG.RIP",
+    "domain": "https://acg.rip/",
+    "encoding": "UTF-8",
+    "search": {
+      "paths": [
+        {
+          "path": "?term={keyword}",
+          "method": "get"
+        }
+      ]
+    },
+    "torrents": {
+      "list": {
+        "selector": "table.table-hover > tr"
+      },
+      "fields": {
+        "id": {
+          "selector": "a[href*=\"/t/\"]",
+          "attribute": "href",
+          "filters": [
+            {
+              "name": "re_search",
+              "args": [
+                "\\d+",
+                0
+              ]
+            }
+          ]
+        },
+        "title": {
+          "selector": "span.title > a"
+        },
+        "details": {
+          "selector": "span.title > a",
+          "attribute": "href"
+        },
+        "download": {
+          "selector": "td.action > a",
+          "attribute": "href"
+        },
+        "date_added": {
+          "selector": "td.date > time",
+          "attribute": "datetime"
+        },
+        "size": {
+          "selector": "td.size"
+        },
+        "seeders": {
+          "selector": "td.peers > div.seed > span"
+        },
+        "leechers": {
+          "selector": "td.peers > div.leech > span"
+        },
+        "grabs": {
+          "selector": "td.peers > div.done > span"
+        },
+        "downloadvolumefactor": {
+          "case": {
+            "*": 0
+          }
+        },
+        "uploadvolumefactor": {
+          "case": {
+            "*": 1
+          }
+        }
+      }
+    },
+    "parser": "",
+    "public": true
+  },
+  {
+    "id": "mikanani",
+    "name": "MiKan",
+    "domain": "https://mikanani.me/",
+    "encoding": "UTF-8",
+    "search": {
+      "paths": [
+        {
+          "path": "Home/Search?searchstr={keyword}",
+          "method": "get"
+        }
+      ]
+    },
+    "torrents": {
+      "list": {
+        "selector": "div.central-container > table > tbody > tr.js-search-results-row"
+      },
+      "fields": {
+        "id": {
+          "selector": "tr.js-search-results-row",
+          "attribute": "data-itemindex"
+        },
+        "title": {
+          "selector": "td:nth-child(1) > a.magnet-link-wrap"
+        },
+        "details": {
+          "selector": "td:nth-child(1) > a.magnet-link-wrap",
+          "attribute": "href"
+        },
+        "download": {
+          "selector": "td:nth-child(1) > a.js-magnet.magnet-link",
+          "attribute": "data-clipboard-text"
+        },
+        "date_added": {
+          "selector": "td:nth-child(3)"
+        },
+        "size": {
+          "selector": "td:nth-child(2)"
+        },
+        "downloadvolumefactor": {
+          "case": {
+            "*": 0
+          }
+        },
+        "uploadvolumefactor": {
+          "case": {
+            "*": 1
+          }
+        }
+      }
+    },
+    "parser": "",
+    "public": true
+  },
+  {
+    "id": "thepiratebay",
+    "name": "海盗湾",
+    "domain": "https://thepiratebay.org/",
+    "encoding": "UTF-8",
+    "search": {
+      "paths": [
+        {
+          "path": "search.php?q={keyword}&all=on&search=Pirate+Search&page=0&orderby=",
+          "method": "get"
+        }
+      ]
+    },
+    "torrents": {
+      "list": {
+        "selector": "div.browse > section.col-center > ol.view-single > li.list-entry"
+      },
+      "fields": {
+        "id": {
+          "selector": "a[href*=\"/description.php?id=\"]",
+          "attribute": "href",
+          "filters": [
+            {
+              "name": "re_search",
+              "args": [
+                "\\d+",
+                0
+              ]
+            }
+          ]
+        },
+        "title": {
+          "selector": "span:nth-child(2) > a"
+        },
+        "details": {
+          "selector": "span:nth-child(2) > a",
+          "attribute": "href"
+        },
+        "download": {
+          "selector": "span:nth-child(4) > a",
+          "attribute": "href"
+        },
+        "date_added": {
+          "selector": "span:nth-child(3)"
+        },
+        "size": {
+          "selector": "span:nth-child(5)"
+        },
+        "seeders": {
+          "selector": "span:nth-child(6)"
+        },
+        "leechers": {
+          "selector": "span:nth-child(7)"
+        },
+        "grabs": {
+          "selector": "span:nth-child(8)"
+        },
+        "downloadvolumefactor": {
+          "case": {
+            "*": 0
+          }
+        },
+        "uploadvolumefactor": {
+          "case": {
+            "*": 1
+          }
+        }
+      }
+    },
+    "parser": "",
+    "public": true
+  },
+  {
+    "id": "rarbg",
+    "name": "RARBG",
+    "domain": "https://rarbg.to",
+    "encoding": "UTF-8",
+    "parser": "",
+    "public": true
+  },
+  {
+    "id": "dmhy",
+    "name": "动漫花园",
+    "domain": "https://dmhy.org/",
+    "encoding": "UTF-8",
+    "search": {
+      "paths": [
+        {
+          "path": "topics/list?keyword={keyword}",
+          "method": "get"
+        }
+      ]
+    },
+    "torrents": {
+      "list": {
+        "selector": "table.tablesorter > tbody > tr"
+      },
+      "fields": {
+        "id": {
+          "selector": "a[href*=\"/topics/list/sort_id/\"]",
+          "attribute": "href",
+          "filters": [
+            {
+              "name": "re_search",
+              "args": [
+                "\\d+",
+                0
+              ]
+            }
+          ]
+        },
+        "title": {
+          "selector": "td.title > a"
+        },
+        "details": {
+          "selector": "td.title > a",
+          "attribute": "href"
+        },
+        "download": {
+          "selector": "a.download-arrow.arrow-magnet",
+          "attribute": "href"
+        },
+        "date_added": {
+          "selector": "td:nth-child(1) > span",
+          "optional": true
+        },
+        "size": {
+          "selector": "td:nth-child(5)"
+        },
+        "seeders": {
+          "selector": "td:nth-child(6)"
+        },
+        "leechers": {
+          "selector": "td:nth-child(7)"
+        },
+        "grabs": {
+          "selector": "td:nth-child(8)"
+        },
+        "downloadvolumefactor": {
+          "case": {
+            "*": 0
+          }
+        },
+        "uploadvolumefactor": {
+          "case": {
+            "*": 1
+          }
+        }
+      }
+    },
+    "parser": "",
+    "public": true
+  },
+  {
+    "id": "comicat",
+    "name": "漫猫",
+    "domain": "http://www.comicat.org",
+    "encoding": "UTF-8",
+    "search": {
+      "paths": [
+        {
+          "path": "search.php?keyword={keyword}",
+          "method": "get"
+        }
+      ]
+    },
+    "torrents": {
+      "list": {
+        "selector": "table#listTable > tbody > tr"
+      },
+      "fields": {
+        "title": {
+          "selector": "td:nth-child(3) > a"
+        },
+        "details": {
+          "selector": "td:nth-child(3) > a",
+          "attribute": "href"
+        },
+        "download": {
+          "detail": {
+            "hash": "//span[@id=\"text_hash_id\"]/text()"
+          }
+        },
+        "date_added": {
+          "selector": "td:nth-child(1)",
+          "optional": true
+        },
+        "size": {
+          "selector": "td:nth-child(4)"
+        },
+        "seeders": {
+          "selector": "td:nth-child(5) > span"
+        },
+        "leechers": {
+          "selector": "td:nth-child(6) > span"
+        },
+        "grabs": {
+          "selector": "td:nth-child(7) > span"
+        },
+        "downloadvolumefactor": {
+          "case": {
+            "*": 0
+          }
+        },
+        "uploadvolumefactor": {
+          "case": {
+            "*": 1
+          }
+        }
+      }
+    },
+    "parser": "",
+    "public": true
+  },
+  {
+    "id": "gaoqing",
+    "name": "高清电台",
+    "domain": "https://gaoqing.fm/",
+    "encoding": "UTF-8",
+    "search": {
+      "paths": [
+        {
+          "path": "s.php?q={keyword}",
+          "method": "get"
+        }
+      ]
+    },
+    "torrents": {
+      "list": {
+        "selector": "div.col-md-9 > ul.item-list.nav > div.row"
+      },
+      "fields": {
+        "id": {
+          "selector": "tr.js-search-results-row",
+          "attribute": "data-itemindex"
+        },
+        "title": {
+          "selector": "div.col-md-9 > div > a[href*=\"https://gaoqing.fm/view/\"] > h4"
+        },
+        "details": {
+          "selector": "div.col-md-9 > div > a[href*=\"https://gaoqing.fm/view/\"]",
+          "attribute": "href"
+        },
+        "download": {
+          "detail": {
+            "xpath": "//table[@id=\"cili\"]//a[@rel=\"nofollow\"]/@href"
+          }
+        },
+        "downloadvolumefactor": {
+          "case": {
+            "*": 0
+          }
+        },
+        "uploadvolumefactor": {
+          "case": {
+            "*": 1
+          }
+        }
+      }
+    },
+    "parser": "",
+    "public": true
+  },
+  {
+    "id": "miobt",
+    "name": "MioBT",
+    "domain": "https://www.miobt.com/",
+    "encoding": "UTF-8",
+    "search": {
+      "paths": [
+        {
+          "path": "search.php?keyword={keyword}",
+          "method": "get"
+        }
+      ]
+    },
+    "torrents": {
+      "list": {
+        "selector": "table.list_style.table_fixed > tbody > tr"
+      },
+      "fields": {
+        "title": {
+          "selector": "td:nth-child(3) > a"
+        },
+        "details": {
+          "selector": "td:nth-child(3) > a",
+          "attribute": "href"
+        },
+        "download": {
+          "detail": {
+            "hash": "//span[@id=\"text_hash_id\"]/text()"
+          }
+        },
+        "date_added": {
+          "selector": "td:nth-child(1)",
+          "optional": true
+        },
+        "size": {
+          "selector": "td:nth-child(4)"
+        },
+        "seeders": {
+          "selector": "td:nth-child(5) > span"
+        },
+        "leechers": {
+          "selector": "td:nth-child(6) > span"
+        },
+        "grabs": {
+          "selector": "td:nth-child(7) > span"
+        },
+        "downloadvolumefactor": {
+          "case": {
+            "*": 0
+          }
+        },
+        "uploadvolumefactor": {
+          "case": {
+            "*": 1
+          }
+        }
+      }
+    },
+    "parser": "",
+    "public": true
+  },
+  {
+    "id": "btsow",
+    "name": "BTSOW",
+    "domain": "https://btsow.quest/",
+    "encoding": "UTF-8",
+    "search": {
+      "paths": [
+        {
+          "path": "search/{keyword}",
+          "method": "get"
+        }
+      ]
+    },
+    "torrents": {
+      "list": {
+        "selector": "div.data-list > div.row"
+      },
+      "fields": {
+        "title": {
+          "selector": "div.row > a",
+          "attribute": "title"
+        },
+        "details": {
+          "selector": "div.row > a",
+          "attribute": "href"
+        },
+        "download": {
+          "detail": {
+            "xpath": "//textarea[@id=\"magnetLink\"]/text()"
+          }
+        },
+        "date_added": {
+          "selector": "div.date"
+        },
+        "size": {
+          "selector": "div.size"
+        },
+        "downloadvolumefactor": {
+          "case": {
+            "*": 0
+          }
+        },
+        "uploadvolumefactor": {
+          "case": {
+            "*": 1
+          }
+        }
+      }
+    },
+    "parser": "",
+    "public": true
+  },
+  {
+    "id": "eztv",
+    "name": "EZTV",
+    "domain": "https://eztv.re/",
+    "encoding": "UTF-8",
+    "search": {
+      "paths": [
+        {
+          "path": "search/{keyword}",
+          "method": "get"
+        }
+      ]
+    },
+    "torrents": {
+      "list": {
+        "selector": "table.forum_header_border > tr[name]"
+      },
+      "fields": {
+        "id": {
+          "selector": "td:nth-child(2) > a[href*=\"/ep/\"]",
+          "attribute": "href",
+          "filters": [
+            {
+              "name": "re_search",
+              "args": [
+                "\\d+",
+                0
+              ]
+            }
+          ]
+        },
+        "title": {
+          "selector": "td:nth-child(2) > a",
+          "attribute": "title"
+        },
+        "details": {
+          "selector": "td:nth-child(2) > a",
+          "attribute": "href"
+        },
+        "download": {
+          "selector": "td:nth-child(3) > a[href*=\"magnet:\"]",
+          "attribute": "href"
+        },
+        "date_added": {
+          "selector": "td:nth-child(5)",
+          "optional": true
+        },
+        "size": {
+          "selector": "td:nth-child(4)"
+        },
+        "seeders": {
+          "selector": "td:nth-child(6) > font"
+        },
+        "downloadvolumefactor": {
+          "case": {
+            "*": 0
+          }
+        },
+        "uploadvolumefactor": {
+          "case": {
+            "*": 1
+          }
+        }
+      }
+    },
+    "parser": "",
+    "public": true
+  }
+]

@@ -156,6 +156,13 @@ def init_modules():
     """
     启动模块
     """
+    # 挂载 Jackett 和内置公开 BT 站点劫持补丁
+    try:
+        from app.helper.jackett import patch_sites_helper
+        patch_sites_helper()
+    except Exception as patch_err:
+        logger.error(f"挂载 Jackett & BT 站点补丁失败: {patch_err}")
+
     # 虚拟显示
     DisplayHelper()
     # DoH

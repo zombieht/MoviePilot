@@ -264,6 +264,14 @@ class IndexerModule(_ModuleBase):
                     cat=cat,
                     page=page
                 )
+            elif site.get('parser') == "Jackett":
+                from app.helper.jackett import JackettHelper
+                error_flag, result = JackettHelper().search(
+                    site=site,
+                    keyword=search_word,
+                    mtype=mtype,
+                    page=page
+                )
             else:
                 error_flag, result = self.__spider_search(
                     search_word=search_word,
@@ -398,6 +406,14 @@ class IndexerModule(_ModuleBase):
                     keyword=search_word,
                     mtype=mtype,
                     cat=cat,
+                    page=page
+                )
+            elif site.get('parser') == "Jackett":
+                from app.helper.jackett import JackettHelper
+                error_flag, result = await JackettHelper().async_search(
+                    site=site,
+                    keyword=search_word,
+                    mtype=mtype,
                     page=page
                 )
             else:
