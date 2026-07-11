@@ -75,7 +75,7 @@
   {
     "id": "hdpianyuan",
     "name": "高清片源网",
-    "domain": "https://www.hdpianyuan.com/",
+    "domain": "https://pianyuan.org/",
     "encoding": "UTF-8",
     "search": {
       "paths": [
@@ -729,17 +729,9 @@
     "public": true
   },
   {
-    "id": "rarbg",
-    "name": "RARBG",
-    "domain": "https://rarbg.to",
-    "encoding": "UTF-8",
-    "parser": "",
-    "public": true
-  },
-  {
     "id": "dmhy",
     "name": "动漫花园",
-    "domain": "https://dmhy.org/",
+    "domain": "https://share.dmhy.org/",
     "encoding": "UTF-8",
     "search": {
       "paths": [
@@ -812,7 +804,7 @@
   {
     "id": "comicat",
     "name": "漫猫",
-    "domain": "http://www.comicat.org",
+    "domain": "https://www.comicat.org/",
     "encoding": "UTF-8",
     "search": {
       "paths": [
@@ -854,55 +846,6 @@
         },
         "grabs": {
           "selector": "td:nth-child(7) > span"
-        },
-        "downloadvolumefactor": {
-          "case": {
-            "*": 0
-          }
-        },
-        "uploadvolumefactor": {
-          "case": {
-            "*": 1
-          }
-        }
-      }
-    },
-    "parser": "",
-    "public": true
-  },
-  {
-    "id": "gaoqing",
-    "name": "高清电台",
-    "domain": "https://gaoqing.fm/",
-    "encoding": "UTF-8",
-    "search": {
-      "paths": [
-        {
-          "path": "s.php?q={keyword}",
-          "method": "get"
-        }
-      ]
-    },
-    "torrents": {
-      "list": {
-        "selector": "div.col-md-9 > ul.item-list.nav > div.row"
-      },
-      "fields": {
-        "id": {
-          "selector": "tr.js-search-results-row",
-          "attribute": "data-itemindex"
-        },
-        "title": {
-          "selector": "div.col-md-9 > div > a[href*=\"https://gaoqing.fm/view/\"] > h4"
-        },
-        "details": {
-          "selector": "div.col-md-9 > div > a[href*=\"https://gaoqing.fm/view/\"]",
-          "attribute": "href"
-        },
-        "download": {
-          "detail": {
-            "xpath": "//table[@id=\"cili\"]//a[@rel=\"nofollow\"]/@href"
-          }
         },
         "downloadvolumefactor": {
           "case": {
@@ -983,7 +926,7 @@
   {
     "id": "btsow",
     "name": "BTSOW",
-    "domain": "https://btsow.quest/",
+    "domain": "https://btsow.com/",
     "encoding": "UTF-8",
     "search": {
       "paths": [

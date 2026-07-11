@@ -344,20 +344,33 @@ def test_site(
 
 @router.get("/icon/{site_id}", summary="站点图标", response_model=schemas.Response)
 async def site_icon(
-    site_id: int,
+    site_id: str,
     db: AsyncSession = Depends(get_async_db),
     _: schemas.TokenPayload = Depends(verify_token),
 ) -> Any:
     """
     获取站点图标：base64或者url
     """
-    site = await Site.async_get(db, site_id)
-    if not site:
+    domain = None
+    if site_id.isdigit():
+        site = await Site.async_get(db, int(site_id))
+        if site:
+            domain = site.domain
+    else:
+        # 如果是字符串，可能是内置公开站点 ID 或 Jackett 站点域名
+        indexer = SitesHelper().get_indexer(site_id)
+        if indexer:
+            domain = indexer.get("domain")
+        else:
+            domain = site_id
+
+    if not domain:
         raise HTTPException(
             status_code=404,
             detail=f"站点 {site_id} 不存在",
         )
-    icon = await SiteIcon.async_get_by_domain(db, site.domain)
+
+    icon = await SiteIcon.async_get_by_domain(db, domain)
     if not icon:
         return schemas.Response(success=False, message="站点图标不存在！")
     return schemas.Response(

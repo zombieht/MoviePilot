@@ -56,6 +56,8 @@ class SiteSpider:
         """
         if not indexer:
             return
+        self.indexer = indexer
+        self.encoding = indexer.get('encoding')
         self.keyword = keyword
         self.cat = cat
         self.mtype = mtype
@@ -111,6 +113,185 @@ class SiteSpider:
                 continue
             templates[name] = Template(template_text)
         return templates
+
+    def __parse_detail_download(self, detail_url: str, detail_config: dict) -> Optional[str]:
+        """
+        同步获取并解析详情页中的下载/磁力链接
+        """
+        if not detail_url:
+            return None
+        try:
+            ret = RequestUtils(
+                ua=self.ua,
+                cookies=self.cookie,
+                timeout=self._timeout,
+                referer=self.referer,
+                proxies=self.proxies
+            ).get_res(detail_url, allow_redirects=True)
+            if not ret:
+                return None
+            html_text = RequestUtils.get_decoded_html_content(
+                ret,
+                performance_mode=settings.ENCODING_DETECTION_PERFORMANCE_MODE,
+                confidence_threshold=settings.ENCODING_DETECTION_MIN_CONFIDENCE
+            )
+            if not html_text:
+                return None
+
+            from lxml import etree
+            parser = etree.HTMLParser(recover=True, encoding=self.encoding or "utf-8")
+            html = etree.HTML(html_text, parser=parser)
+            if html is None:
+                return None
+
+            if "xpath" in detail_config:
+                xpath_expr = detail_config["xpath"]
+                res = html.xpath(xpath_expr)
+                if res:
+                    return str(res[0]).strip()
+            elif "hash" in detail_config:
+                xpath_expr = detail_config["hash"]
+                res = html.xpath(xpath_expr)
+                if res:
+                    val = str(res[0]).strip()
+                    if val:
+                        return f"magnet:?xt=urn:btih:{val}"
+            elif "selector" in detail_config:
+                selector = detail_config["selector"]
+                doc = PyQuery(html_text)
+                elem = doc(selector)
+                attr = detail_config.get("attribute")
+                if attr:
+                    val = elem.attr(attr)
+                else:
+                    val = elem.text()
+                if val:
+                    return val.strip()
+        except Exception as e:
+            logger.error(f"解析详情页 {detail_url} 出错: {e}")
+        return None
+
+    async def __async_parse_detail_download(self, detail_url: str, detail_config: dict) -> Optional[str]:
+        """
+        异步获取并解析详情页中的下载/磁力链接
+        """
+        if not detail_url:
+            return None
+        try:
+            ret = await AsyncRequestUtils(
+                ua=self.ua,
+                cookies=self.cookie,
+                timeout=self._timeout,
+                referer=self.referer,
+                proxies=self.proxies
+            ).get_res(detail_url, allow_redirects=True)
+            if not ret:
+                return None
+            html_text = RequestUtils.get_decoded_html_content(
+                ret,
+                performance_mode=settings.ENCODING_DETECTION_PERFORMANCE_MODE,
+                confidence_threshold=settings.ENCODING_DETECTION_MIN_CONFIDENCE
+            )
+            if not html_text:
+                return None
+
+            from lxml import etree
+            parser = etree.HTMLParser(recover=True, encoding=self.encoding or "utf-8")
+            html = etree.HTML(html_text, parser=parser)
+            if html is None:
+                return None
+
+            if "xpath" in detail_config:
+                xpath_expr = detail_config["xpath"]
+                res = html.xpath(xpath_expr)
+                if res:
+                    return str(res[0]).strip()
+            elif "hash" in detail_config:
+                xpath_expr = detail_config["hash"]
+                res = html.xpath(xpath_expr)
+                if res:
+                    val = str(res[0]).strip()
+                    if val:
+                        return f"magnet:?xt=urn:btih:{val}"
+            elif "selector" in detail_config:
+                selector = detail_config["selector"]
+                doc = PyQuery(html_text)
+                elem = doc(selector)
+                attr = detail_config.get("attribute")
+                if attr:
+                    val = elem.attr(attr)
+                else:
+                    val = elem.text()
+                if val:
+                    return val.strip()
+        except Exception as e:
+            logger.error(f"异步解析详情页 {detail_url} 出错: {e}")
+        return None
+
+    def __fill_detail_downloads(self, results: List[dict]):
+        """
+        同步并发填充种子详情页下载链接
+        """
+        if not results:
+            return
+        download_config = self.fields.get("download", {})
+        if not isinstance(download_config, dict) or "detail" not in download_config:
+            return
+        detail_config = download_config["detail"]
+
+        tasks = []
+        for item in results:
+            if not item.get("enclosure") and item.get("page_url"):
+                tasks.append(item)
+
+        if not tasks:
+            return
+
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+        max_workers = min(len(tasks), 10)
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            future_to_item = {
+                executor.submit(self.__parse_detail_download, item["page_url"], detail_config): item
+                for item in tasks
+            }
+            for future in as_completed(future_to_item):
+                item = future_to_item[future]
+                try:
+                    enclosure = future.result()
+                    if enclosure:
+                        item["enclosure"] = enclosure
+                except Exception as e:
+                    logger.error(f"并发解析详情页 {item.get('page_url')} 出错: {e}")
+
+    async def __async_fill_detail_downloads(self, results: List[dict]):
+        """
+        异步并发填充种子详情页下载链接
+        """
+        if not results:
+            return
+        download_config = self.fields.get("download", {})
+        if not isinstance(download_config, dict) or "detail" not in download_config:
+            return
+        detail_config = download_config["detail"]
+
+        tasks = []
+        for item in results:
+            if not item.get("enclosure") and item.get("page_url"):
+                tasks.append(item)
+
+        if not tasks:
+            return
+
+        import asyncio
+        async def _worker(item):
+            try:
+                enclosure = await self.__async_parse_detail_download(item["page_url"], detail_config)
+                if enclosure:
+                    item["enclosure"] = enclosure
+            except Exception as e:
+                logger.error(f"异步并发解析详情页 {item.get('page_url')} 出错: {e}")
+
+        await asyncio.gather(*[_worker(item) for item in tasks])
 
     @classmethod
     def default_result_num(cls) -> int:
@@ -276,13 +457,15 @@ class SiteSpider:
             proxies=self.proxies
         ).get_res(searchurl, allow_redirects=True)
         # 解析返回
-        return self.parse(
+        results = self.parse(
             RequestUtils.get_decoded_html_content(
                 ret,
                 performance_mode=settings.ENCODING_DETECTION_PERFORMANCE_MODE,
                 confidence_threshold=settings.ENCODING_DETECTION_MIN_CONFIDENCE
             )
         )
+        self.__fill_detail_downloads(results)
+        return results
 
     async def async_get_torrents(self) -> List[dict]:
         """
@@ -305,7 +488,7 @@ class SiteSpider:
             proxies=self.proxies
         ).get_res(searchurl, allow_redirects=True)
         # 解析返回
-        return await run_in_threadpool(
+        results = await run_in_threadpool(
             self.parse,
             RequestUtils.get_decoded_html_content(
                 ret,
@@ -313,6 +496,8 @@ class SiteSpider:
                 confidence_threshold=settings.ENCODING_DETECTION_MIN_CONFIDENCE
             )
         )
+        await self.__async_fill_detail_downloads(results)
+        return results
 
     def __get_title(self, torrent: Any):
         # title default text
